@@ -1,3 +1,3 @@
 Minimal Nodejs-Python Bear Classifier  
 
-<font color='red'>Model yet to be uploaded. Figuring out how to use LFS</font>
+For model file, LFS was used as guided [here](https://www.git-tower.com/learn/git/ebook/en/command-line/advanced-topics/git-lfs)
