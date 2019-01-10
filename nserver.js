@@ -23,7 +23,7 @@ const fs = require('fs'); // to clean up the file
 
 
 //2. Initiate
-const hostname = '127.0.0.1';
+// const hostname = '127.0.0.1';
 var app = express();
 
 
@@ -40,7 +40,7 @@ app.get("/",routes.home);
 //---- PYTHON STUFF -----
 //start python server
 var server = spawn('python', ['pyserver.py']);
-var client = new zerorpc.Client();
+var client = new zerorpc.Client({ timeout: 60,heartbeatInterval: 60000});
 if (server != null)
 {
     console.log('Py server called');   // server call initiation success
@@ -109,9 +109,9 @@ app.post('/upload', upload.single('file-to-upload'), (req, upload_res) => {
 
 //5. Listen
 var port = process.env.PORT || 8080;
-var server = app.listen(port,hostname,
+var server = app.listen(port,
     function(request,response)
     {
-        console.log(`Node Server started. Running at http://${hostname}:${port}/`);
+        console.log(`Node Server started. Running at http://localhost:${port}/`);
     }
 );
