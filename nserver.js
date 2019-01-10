@@ -40,7 +40,8 @@ app.get("/",routes.home);
 //---- PYTHON STUFF -----
 //start python server
 var server = spawn('python', ['pyserver.py']);
-var client = new zerorpc.Client({ timeout: 60,heartbeatInterval: 60000});
+var client = new zerorpc.Client({ timeout: 60,heartbeatInterval: 30000});
+
 if (server != null)
 {
     console.log('Py server called');   // server call initiation success
@@ -51,9 +52,13 @@ client.connect("tcp://127.0.0.1:4242");
 client.on("error", function(error) {
     console.error("RPC client error:", error);     // error connecting from client
 });
+console.time('start_pyserver time');
 client.invoke("start_pyserver", function(error, res, more) {
     console.log(res);                              // server response as per method invoked
+    console.timeEnd('start_pyserver time');
+    
 });
+
 //---- END OF PYTHON STUFF -----
 
 //---- FILE UPLOAD ----
@@ -67,9 +72,12 @@ app.post('/upload', upload.single('file-to-upload'), (req, upload_res) => {
         const {path} = req.file;
         console.log(path);
         
+        
         // call dummy test function (predict image) - shall comemnt it once main call implemented
+        console.time('predict_image_time');
         client.invoke("predict_image", path, function(error, res, more) {
 
+            console.timeEnd('predict_image_time');
             console.log('the prediction from python server is ' + res);
 
             // render same index page with success message

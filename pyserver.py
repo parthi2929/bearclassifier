@@ -1,5 +1,5 @@
 import zerorpc
-
+import os
 from pymodel import FastaiImageClassifier
 
 class PyServer(object):
@@ -9,7 +9,7 @@ class PyServer(object):
     def start_pyserver(self):        
         return "Py server started"
 
-    def predict_image(self, image_path):         
+    def predict_image(self, image_path): 
         result =  self.model.predict(image_path)        
         return  str(result)        # apparantly this explicit conversion needed to properly receive in nodejs
         # return 'all is well'
