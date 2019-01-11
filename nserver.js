@@ -33,8 +33,7 @@ app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-//4. Routing
-app.get("/",routes.home);
+
 
 
 
@@ -56,13 +55,21 @@ client.on("error", function(error) {
 console.time('start_pyserver time');
 client.invoke("start_pyserver", function(error, res, more) {
     console.log(res);                              // server response as per method invoked
+    if (error)
+    {
+        console.error(error);
+    }
     console.timeEnd('start_pyserver time');
     
 });
 
 //---- END OF PYTHON STUFF -----
 
-//---- FILE UPLOAD ----
+
+//4. Routing
+app.get("/",routes.home);
+
+
 var global_res;
 function verySlowInferenceFunction(path, upload_res, callback)
 {
@@ -100,6 +107,7 @@ function verySlowInferenceFunction(path, upload_res, callback)
         });   
 
 }
+//---- submit ----
 // It's very crucial that the file name matches the name attribute in your html
 app.post('/upload', upload.single('file-to-upload'), (req, upload_res) => {
 

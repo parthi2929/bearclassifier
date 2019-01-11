@@ -3,10 +3,11 @@ import os
 from pymodel import FastaiImageClassifier
 
 class PyServer(object):
-    def __init__(self):
-        self.model = FastaiImageClassifier()
+    # def __init__(self):
+        # return "Py server initiated"
 
     def start_pyserver(self):        
+        self.model = FastaiImageClassifier()
         return "Py server started"
 
     def predict_image(self, image_path): 
