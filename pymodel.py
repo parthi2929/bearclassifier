@@ -28,7 +28,7 @@ class FastaiImageClassifier(object):
         data = ImageDataBunch.single_from_classes(
             path_to_pth_file, classes, 
             tfms=get_transforms(), 
-            size=224).normalize(imagenet_stats)
+            size=64).normalize(imagenet_stats)
 
         learner = create_cnn(data, models.resnet34).load(learner_name_to_load)
         

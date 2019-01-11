@@ -57,7 +57,7 @@ client.invoke("start_pyserver", function(error, res, more) {
     console.log(res);                              // server response as per method invoked
     if (error)
     {
-        console.error(error);
+        console.log(error);
     }
     console.timeEnd('start_pyserver time');
     
@@ -91,8 +91,8 @@ function verySlowInferenceFunction(path, upload_res, callback)
             // delete the uploaded file (regardless whether prediction successful or not)
             // need to delete only after our job is done so placing it here. 
             fs.unlink(path, (err) => {
-                if (err) console.error(err)
-                console.log('Cleaned up', path)
+                if (err) console.error(err);
+                console.log('Cleaned up', path);
             });
 
             //if no more to stream from python its done
