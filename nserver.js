@@ -41,7 +41,7 @@ app.get("/",routes.home);
 //---- PYTHON STUFF -----
 //start python server
 var server = spawn('python', ['pyserver.py']);
-var client = new zerorpc.Client({ timeout: 60,heartbeatInterval: 30000});
+var client = new zerorpc.Client({ timeout: 60,heartbeatInterval: 60000});
 
 if (server != null)
 {
