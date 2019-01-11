@@ -41,7 +41,7 @@ app.get("/",routes.home);
 //---- PYTHON STUFF -----
 //start python server
 var server = spawn('python', ['pyserver.py']);
-var client = new zerorpc.Client({ timeout: 120,heartbeatInterval: 10000});
+var client = new zerorpc.Client({ timeout: 60,heartbeatInterval: 30000 });
 
 if (server != null)
 {
@@ -139,7 +139,7 @@ app.post('/upload', upload.single('file-to-upload'), (req, upload_res) => {
 
 //5. Listen
 var port = process.env.PORT || 8080;
-var server = app.listen(port,
+app.listen(port,
     function(request,response)
     {
         console.log(`Node Server started. Running at http://localhost:${port}/`);
