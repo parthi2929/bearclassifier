@@ -6,6 +6,7 @@ var zerorpc = require("zerorpc");
 const spawn = require('child_process').spawn;
 const http = require('http');
 const multer = require('multer');
+var DelayedResponse = require('http-delayed-response'); // to handle heroku's 30 second H12 error bottleneck
 
 //https://stackoverflow.com/questions/31592726/how-to-store-a-file-with-file-extension-with-multer
 var storage = multer.diskStorage({
@@ -62,17 +63,10 @@ client.invoke("start_pyserver", function(error, res, more) {
 //---- END OF PYTHON STUFF -----
 
 //---- FILE UPLOAD ----
-// It's very crucial that the file name matches the name attribute in your html
 var global_res;
-app.post('/upload', upload.single('file-to-upload'), (req, upload_res) => {
+function verySlowInferenceFunction(path, upload_res, callback)
+{
 
-    if (req.file != null)  // if no resubmission of same data..
-    {
-
-        const {path} = req.file;
-        console.log(path);
-        
-        
         // call dummy test function (predict image) - shall comemnt it once main call implemented
         console.time('predict_image_time');
         client.invoke("predict_image", path, function(error, res, more) {
@@ -101,7 +95,35 @@ app.post('/upload', upload.single('file-to-upload'), (req, upload_res) => {
 
             global_res = res;
 
-        });       
+            callback();
+
+        });   
+
+}
+// It's very crucial that the file name matches the name attribute in your html
+app.post('/upload', upload.single('file-to-upload'), (req, upload_res) => {
+
+    if (req.file != null)  // if no resubmission of same data..
+    {
+
+        const {path} = req.file;
+        console.log(path);
+        
+        var delayed = new DelayedResponse(req, upload_res);
+        verySlowInferenceFunction(path, upload_res, delayed.start(2000,1000)); 
+
+        delayed.on('heartbeat', function (results) 
+        {
+            upload_res.write(' ');
+            console.log('keeping the request alive');
+        });
+    
+        delayed.on('done', function (results) 
+        {
+            console.log('slow function is done');    
+            upload_res.end();
+        });          
+
     }
     else
     {
