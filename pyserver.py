@@ -15,6 +15,6 @@ class PyServer(object):
         return  str(result)        # apparantly this explicit conversion needed to properly receive in nodejs
         # return 'all is well'
 
-s = zerorpc.Server(PyServer(),heartbeat=10)
+s = zerorpc.Server(PyServer())
 s.bind("tcp://0.0.0.0:4242")
 s.run()
